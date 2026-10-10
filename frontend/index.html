@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Stubble Smoke Alert: Next-day AQI early-warning system for Delhi-NCR schools. Predicts tomorrow's air quality from upwind fire detections and weather data.">
+    <title>Stubble Smoke Alert | Delhi-NCR School Air Quality Forecast</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Leaflet.js -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header id="app-header">
+        <div class="header-content">
+            <div class="logo-area">
+                <div class="logo-icon" aria-hidden="true">
+                    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+                        <path d="M20 8 C16 14, 12 18, 12 23 C12 27.4 15.6 31 20 31 C24.4 31 28 27.4 28 23 C28 18 24 14 20 8Z" fill="currentColor" opacity="0.8"/>
+                        <path d="M18 20 Q20 16 22 20 Q24 24 20 26 Q16 24 18 20Z" fill="rgba(255,255,255,0.4)"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1>Stubble Smoke Alert</h1>
+                    <p class="subtitle">Next-Day AQI Forecast for Delhi-NCR Schools</p>
+                </div>
+            </div>
+            <div class="header-meta" id="header-meta">
+                <span class="badge badge-data" id="data-source-badge">Loading...</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Forecast Card -->
+        <section id="forecast-section" class="forecast-section">
+            <div class="forecast-card glass" id="forecast-card">
+                <div class="forecast-loading" id="forecast-loading">
+                    <div class="spinner"></div>
+                    <p>Loading forecast...</p>
+                </div>
+                <div class="forecast-content hidden" id="forecast-content">
+                    <div class="forecast-header">
+                        <div class="date-info">
+                            <span class="label">Forecast for</span>
+                            <span class="forecast-date" id="forecast-date">--</span>
+                        </div>
+                        <div class="today-info">
+                            <span class="label">Today's AQI</span>
+                            <span class="today-aqi" id="today-aqi">--</span>
+                        </div>
+                    </div>
+
+                    <div class="band-display" id="band-display">
+                        <div class="band-label" id="band-label">--</div>
+                        <div class="band-range" id="band-range">AQI --</div>
+                    </div>
+
+                    <div class="action-card" id="action-card">
+                        <div class="action-icon" id="action-icon" aria-hidden="true"></div>
+                        <div class="action-text">
+                            <h3>Recommended Action</h3>
+                            <p id="action-text">--</p>
+                        </div>
+                    </div>
+
+                    <div class="reason-card" id="reason-card">
+                        <h3>Why this forecast?</h3>
+                        <p id="reason-text">--</p>
+                    </div>
+
+                    <div class="details-row" id="details-row">
+                        <div class="detail-item">
+                            <span class="detail-label">Wind</span>
+                            <span class="detail-value" id="wind-info">--</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Temperature</span>
+                            <span class="detail-value" id="temp-info">--</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Humidity</span>
+                            <span class="detail-value" id="humidity-info">--</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Fires Upwind</span>
+                            <span class="detail-value" id="fires-info">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Map Section -->
+        <section class="map-section">
+            <div class="section-header">
+                <h2>Upwind Fire Detections</h2>
+                <p class="section-desc">Recent satellite fire detections in Punjab, Haryana & Western UP. Wind direction shown relative to Delhi.</p>
+            </div>
+            <div class="map-container glass" id="map-container">
+                <div id="map"></div>
+                <div class="map-legend" id="map-legend">
+                    <h4>Legend</h4>
+                    <div class="legend-item">
+                        <span class="legend-dot fire"></span> Fire Detection
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot delhi"></span> Delhi
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-line wind"></span> Wind Direction
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AQI Scale Reference -->
+        <section class="scale-section">
+            <h2>CPCB AQI Scale & School Actions</h2>
+            <div class="scale-grid" id="scale-grid">
+                <div class="scale-item" data-band="Good">
+                    <div class="scale-color" style="background: #4caf50;"></div>
+                    <div class="scale-info">
+                        <strong>Good</strong> <span class="scale-range">0-50</span>
+                        <p>Normal outdoor activity</p>
+                    </div>
+                </div>
+                <div class="scale-item" data-band="Moderate">
+                    <div class="scale-color" style="background: #ffeb3b;"></div>
+                    <div class="scale-info">
+                        <strong>Moderate</strong> <span class="scale-range">51-100</span>
+                        <p>Normal activity; monitor sensitive students</p>
+                    </div>
+                </div>
+                <div class="scale-item" data-band="Poor">
+                    <div class="scale-color" style="background: #ff9800;"></div>
+                    <div class="scale-info">
+                        <strong>Poor</strong> <span class="scale-range">101-200</span>
+                        <p>Shorten outdoor activity; masks for sensitive students</p>
+                    </div>
+                </div>
+                <div class="scale-item" data-band="Very Poor">
+                    <div class="scale-color" style="background: #f44336;"></div>
+                    <div class="scale-info">
+                        <strong>Very Poor</strong> <span class="scale-range">201-300</span>
+                        <p>Move PE indoors; close windows</p>
+                    </div>
+                </div>
+                <div class="scale-item" data-band="Severe">
+                    <div class="scale-color" style="background: #9c27b0;"></div>
+                    <div class="scale-info">
+                        <strong>Severe</strong> <span class="scale-range">301-500</span>
+                        <p>Cancel outdoor activities; notify parents</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Model Info -->
+        <section class="model-section glass">
+            <h2>About This Forecast</h2>
+            <div class="model-info-grid">
+                <div class="model-stat">
+                    <span class="stat-label">Model</span>
+                    <span class="stat-value" id="model-type">--</span>
+                </div>
+                <div class="model-stat">
+                    <span class="stat-label">Model Accuracy</span>
+                    <span class="stat-value" id="model-accuracy">--</span>
+                </div>
+                <div class="model-stat">
+                    <span class="stat-label">Baseline Accuracy</span>
+                    <span class="stat-value" id="baseline-accuracy">--</span>
+                </div>
+                <div class="model-stat">
+                    <span class="stat-label">Data Source</span>
+                    <span class="stat-value" id="data-source">--</span>
+                </div>
+            </div>
+            <p class="disclaimer" id="disclaimer">--</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>Built for <strong>AWS Bharat Builds Tour</strong> &mdash; Environmental Hacks, Air Track</p>
+        <p class="footer-small">Data: Open-Meteo (CC BY 4.0), NASA FIRMS. This is an experimental tool. Always verify with <a href="https://cpcb.nic.in/" target="_blank" rel="noopener">CPCB</a>.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
