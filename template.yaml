@@ -1,0 +1,121 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Stubble Smoke Alert - Next-day AQI early-warning for Delhi-NCR schools.
+  Deployed via AWS SAM for the AWS Bharat Builds Tour hackathon.
+
+Parameters:
+  BucketName:
+    Type: String
+    Default: stubble-smoke-alert-data
+    Description: S3 bucket for forecast data and static frontend
+
+Globals:
+  Function:
+    Timeout: 10
+    Runtime: python3.11
+    MemorySize: 128
+    Environment:
+      Variables:
+        S3_BUCKET_NAME: !Ref DataBucket
+
+Resources:
+  # ── S3 Bucket for data and static frontend ──────────────────
+  DataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${BucketName}-${AWS::AccountId}"
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: index.html
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders: ['*']
+            AllowedMethods: [GET]
+            AllowedOrigins: ['*']
+            MaxAge: 3600
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+
+  # Bucket policy to allow public read for frontend
+  DataBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref DataBucket
+      PolicyDocument:
+        Statement:
+          - Sid: PublicReadForFrontend
+            Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Sub '${DataBucket.Arn}/frontend/*'
+
+  # ── Lambda Function ─────────────────────────────────────────
+  ForecastFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/lambda_handler.handler
+      CodeUri: .
+      Description: Serves AQI forecast and fire data from S3
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Ref DataBucket
+      Events:
+        GetForecast:
+          Type: HttpApi
+          Properties:
+            Path: /forecast
+            Method: GET
+            ApiId: !Ref HttpApi
+        GetFires:
+          Type: HttpApi
+          Properties:
+            Path: /fires
+            Method: GET
+            ApiId: !Ref HttpApi
+        OptionsForecast:
+          Type: HttpApi
+          Properties:
+            Path: /forecast
+            Method: OPTIONS
+            ApiId: !Ref HttpApi
+        OptionsFires:
+          Type: HttpApi
+          Properties:
+            Path: /fires
+            Method: OPTIONS
+            ApiId: !Ref HttpApi
+
+  # ── API Gateway HTTP API ────────────────────────────────────
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: prod
+      CorsConfiguration:
+        AllowOrigins:
+          - '*'
+        AllowMethods:
+          - GET
+          - OPTIONS
+        AllowHeaders:
+          - Content-Type
+
+Outputs:
+  ApiUrl:
+    Description: API Gateway endpoint URL
+    Value: !Sub "https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/prod"
+
+  FrontendUrl:
+    Description: Static frontend URL (S3 website)
+    Value: !Sub "http://${DataBucket}.s3-website-${AWS::Region}.amazonaws.com/frontend/index.html"
+
+  BucketName:
+    Description: S3 bucket name
+    Value: !Ref DataBucket
+
+  FunctionArn:
+    Description: Lambda function ARN
+    Value: !GetAtt ForecastFunction.Arn
