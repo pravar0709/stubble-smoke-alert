@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -68,6 +71,7 @@
             <span class="live-time" id="live-time">--:--:--</span>
             <span class="live-date" id="live-date">Loading...</span>
             <span class="live-location" id="live-location"></span>
+            <span class="refresh-countdown" id="refresh-countdown"></span>
         </div>
 
         <!-- Forecast Card -->
@@ -200,6 +204,83 @@
                     <div class="scale-info">
                         <strong>Severe</strong> <span class="scale-range">301-500</span>
                         <p>Cancel outdoor activities; notify parents</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 24-Hour AQI Trend -->
+        <section class="trend-section">
+            <div class="section-header">
+                <h2>24-Hour AQI Trend</h2>
+                <p class="section-desc">Hourly US AQI readings for the selected city. Data from Open-Meteo CAMS model.</p>
+            </div>
+            <div class="trend-container glass">
+                <canvas id="aqi-trend-chart" height="220"></canvas>
+            </div>
+        </section>
+
+        <!-- Health Advisory -->
+        <section class="health-section">
+            <div class="section-header">
+                <h2>Children's Health Advisory</h2>
+                <p class="section-desc">Evidence-based guidance for school staff and parents based on current AQI.</p>
+            </div>
+            <div class="health-grid" id="health-grid">
+                <div class="health-card glass" id="health-outdoor">
+                    <div class="health-icon">&#127939;</div>
+                    <h3>Outdoor Activity</h3>
+                    <p id="health-outdoor-text">--</p>
+                </div>
+                <div class="health-card glass" id="health-mask">
+                    <div class="health-icon">&#128567;</div>
+                    <h3>Masks &amp; Protection</h3>
+                    <p id="health-mask-text">--</p>
+                </div>
+                <div class="health-card glass" id="health-ventilation">
+                    <div class="health-icon">&#127978;</div>
+                    <h3>Ventilation</h3>
+                    <p id="health-ventilation-text">--</p>
+                </div>
+                <div class="health-card glass" id="health-sensitive">
+                    <div class="health-icon">&#129657;</div>
+                    <h3>Sensitive Students</h3>
+                    <p id="health-sensitive-text">--</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- AWS SNS Alert Subscription -->
+        <section class="alert-section glass">
+            <div class="alert-content">
+                <div class="alert-info">
+                    <h2>&#128232; School Alert Subscription</h2>
+                    <p>Get daily AQI alerts for your school via <strong>AWS SNS</strong> (Simple Notification Service). Enter your email to receive automated forecasts before the school day starts.</p>
+                </div>
+                <form class="alert-form" id="alert-form">
+                    <input type="email" id="alert-email" placeholder="principal@school.edu.in" required aria-label="Email for AQI alerts">
+                    <select id="alert-city" aria-label="City for alerts">
+                        <option value="delhi">Delhi</option>
+                        <option value="noida">Noida</option>
+                        <option value="gurugram">Gurugram</option>
+                        <option value="mumbai">Mumbai</option>
+                        <option value="kolkata">Kolkata</option>
+                        <option value="bengaluru">Bengaluru</option>
+                        <option value="chennai">Chennai</option>
+                    </select>
+                    <button type="submit" id="alert-submit">Subscribe via AWS SNS</button>
+                </form>
+                <p class="alert-status" id="alert-status"></p>
+                <div class="aws-architecture">
+                    <p class="arch-label">AWS Architecture:</p>
+                    <div class="arch-flow">
+                        <span class="arch-node">EventBridge<br><small>Daily 6 AM trigger</small></span>
+                        <span class="arch-arrow">&#8594;</span>
+                        <span class="arch-node">Lambda<br><small>Generate forecast</small></span>
+                        <span class="arch-arrow">&#8594;</span>
+                        <span class="arch-node">SNS Topic<br><small>Fan-out to emails</small></span>
+                        <span class="arch-arrow">&#8594;</span>
+                        <span class="arch-node">School Inbox<br><small>AQI + Action</small></span>
                     </div>
                 </div>
             </div>

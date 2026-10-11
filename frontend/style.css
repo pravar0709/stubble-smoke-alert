@@ -543,6 +543,204 @@ main {
     border-left-color: rgba(255, 255, 255, 0.6);
 }
 
+/* ── Trend Chart ───────────────────────────────────────────── */
+.trend-section { width: 100%; }
+
+.trend-container {
+    padding: 1.25rem;
+    box-shadow: var(--shadow-lg);
+}
+
+/* ── Health Advisory ───────────────────────────────────────── */
+.health-section { width: 100%; }
+
+.health-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem;
+}
+
+.health-card {
+    padding: 1.25rem;
+    text-align: center;
+    transition: transform 0.2s ease, border-color 0.3s ease;
+    box-shadow: var(--shadow-lg);
+}
+
+.health-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.health-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    line-height: 1;
+}
+
+.health-card h3 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: var(--text-primary);
+}
+
+.health-card p {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* ── Alert Subscription ────────────────────────────────────── */
+.alert-section {
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow-lg);
+}
+
+.alert-content h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.alert-info p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.alert-form {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+}
+
+.alert-form input[type="email"] {
+    flex: 1;
+    min-width: 200px;
+    padding: 0.55rem 0.8rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: var(--font);
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.alert-form input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.alert-form select {
+    padding: 0.55rem 0.6rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: var(--font);
+    font-size: 0.82rem;
+    cursor: pointer;
+    outline: none;
+}
+
+.alert-form select option {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.alert-form button {
+    padding: 0.55rem 1.2rem;
+    background: linear-gradient(135deg, #ff9900, #e88600);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: var(--font);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.alert-form button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(255, 153, 0, 0.3);
+}
+
+.alert-form button:active {
+    transform: translateY(0);
+}
+
+.alert-status {
+    font-size: 0.8rem;
+    min-height: 1.2rem;
+}
+
+.alert-status.success { color: #10b981; }
+.alert-status.error { color: #f44336; }
+
+/* ── AWS Architecture Flow ─────────────────────────────────── */
+.aws-architecture {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--glass-border);
+}
+
+.arch-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+}
+
+.arch-flow {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    overflow-x: auto;
+    padding-bottom: 0.3rem;
+}
+
+.arch-node {
+    padding: 0.5rem 0.75rem;
+    background: rgba(255, 153, 0, 0.08);
+    border: 1px solid rgba(255, 153, 0, 0.2);
+    border-radius: var(--radius-sm);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #ff9900;
+    text-align: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.arch-node small {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    margin-top: 0.15rem;
+}
+
+.arch-arrow {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+/* ── Refresh Countdown ─────────────────────────────────────── */
+.refresh-countdown {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
 /* ── AQI Scale ─────────────────────────────────────────────── */
 .scale-section {
     width: 100%;

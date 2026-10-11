@@ -47,6 +47,10 @@ let map = null;
 let currentCity = 'delhi';
 let mapMarkers = [];
 let forecastData = null;
+let trendChart = null;
+let refreshTimer = null;
+const REFRESH_INTERVAL = 300; // 5 minutes in seconds
+let refreshCountdown = REFRESH_INTERVAL;
 
 // ── Initialization ────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
@@ -62,6 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load data for default city
     fetchLiveData(currentCity);
+
+    // Auto-refresh every 5 minutes
+    startAutoRefresh();
+
+    // SNS alert form
+    document.getElementById('alert-form').addEventListener('submit', handleAlertSubscribe);
 });
 
 // ── Live Clock ────────────────────────────────────────────────────────────
@@ -114,6 +124,10 @@ async function fetchLiveData(cityKey) {
         renderForecast(forecast);
         renderMap(forecast, city);
         renderModelInfo(forecast);
+        renderHealthAdvisory(forecast);
+
+        // Fetch and render 24-hour trend
+        fetchAndRenderTrend(city.lat, city.lon);
 
     } catch (err) {
         console.error('Failed to fetch data:', err);
@@ -437,4 +451,235 @@ function hexToRgba(hex, alpha) {
     const g = parseInt(hex.slice(3, 5), 16);
     const b = parseInt(hex.slice(5, 7), 16);
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+// ── 24-Hour AQI Trend Chart ──────────────────────────────────────────────
+
+async function fetchAndRenderTrend(lat, lon) {
+    try {
+        const url = `${AIR_QUALITY_API}?latitude=${lat}&longitude=${lon}&hourly=us_aqi,pm2_5&past_hours=24&forecast_hours=12&timezone=Asia/Kolkata`;
+        const resp = await fetch(url);
+        if (!resp.ok) return;
+        const data = await resp.json();
+
+        const hourly = data.hourly || {};
+        const times = (hourly.time || []).map(t => {
+            const d = new Date(t);
+            return d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false });
+        });
+        const aqiValues = hourly.us_aqi || [];
+        const pm25Values = hourly.pm2_5 || [];
+
+        // Color each point by AQI band
+        const colors = aqiValues.map(v => {
+            if (v <= 50) return '#4caf50';
+            if (v <= 100) return '#ffeb3b';
+            if (v <= 200) return '#ff9800';
+            if (v <= 300) return '#f44336';
+            return '#9c27b0';
+        });
+
+        // Mark current time
+        const now = new Date();
+        const nowIdx = times.findIndex((t, i) => {
+            const dt = new Date(hourly.time[i]);
+            return dt >= now;
+        });
+
+        renderTrendChart(times, aqiValues, pm25Values, colors, nowIdx);
+    } catch (e) {
+        console.error('Trend chart error:', e);
+    }
+}
+
+function renderTrendChart(labels, aqiData, pm25Data, colors, nowIdx) {
+    const ctx = document.getElementById('aqi-trend-chart').getContext('2d');
+
+    if (trendChart) trendChart.destroy();
+
+    trendChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'US AQI',
+                    data: aqiData,
+                    borderColor: '#ff9800',
+                    backgroundColor: 'rgba(255, 152, 0, 0.1)',
+                    borderWidth: 2,
+                    pointRadius: 2,
+                    pointBackgroundColor: colors,
+                    tension: 0.3,
+                    fill: true,
+                    yAxisID: 'y',
+                },
+                {
+                    label: 'PM2.5 (\u00b5g/m\u00b3)',
+                    data: pm25Data,
+                    borderColor: '#3b82f6',
+                    borderWidth: 1.5,
+                    pointRadius: 0,
+                    borderDash: [4, 4],
+                    tension: 0.3,
+                    fill: false,
+                    yAxisID: 'y1',
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: {
+                    labels: { color: '#94a3b8', font: { family: 'Inter', size: 11 } }
+                },
+                annotation: nowIdx > 0 ? {
+                    annotations: {
+                        nowLine: {
+                            type: 'line',
+                            xMin: nowIdx,
+                            xMax: nowIdx,
+                            borderColor: 'rgba(16, 185, 129, 0.5)',
+                            borderWidth: 2,
+                            borderDash: [3, 3],
+                            label: { content: 'Now', display: true, color: '#10b981', font: { size: 10 } },
+                        },
+                    },
+                } : {},
+            },
+            scales: {
+                x: {
+                    ticks: { color: '#64748b', font: { size: 10 }, maxRotation: 45, maxTicksLimit: 12 },
+                    grid: { color: 'rgba(255,255,255,0.04)' },
+                },
+                y: {
+                    position: 'left',
+                    title: { display: true, text: 'US AQI', color: '#ff9800', font: { size: 11 } },
+                    ticks: { color: '#ff9800', font: { size: 10 } },
+                    grid: { color: 'rgba(255,255,255,0.04)' },
+                    min: 0,
+                },
+                y1: {
+                    position: 'right',
+                    title: { display: true, text: 'PM2.5 \u00b5g/m\u00b3', color: '#3b82f6', font: { size: 11 } },
+                    ticks: { color: '#3b82f6', font: { size: 10 } },
+                    grid: { drawOnChartArea: false },
+                    min: 0,
+                },
+            },
+        },
+    });
+}
+
+// ── Children's Health Advisory ───────────────────────────────────────────
+
+const HEALTH_DATA = {
+    'Good': {
+        outdoor: 'All outdoor sports, PE, and recess can proceed normally. Encourage physical activity.',
+        mask: 'No masks needed. Normal breathing for all students.',
+        ventilation: 'Open windows for fresh air circulation. Natural ventilation is ideal.',
+        sensitive: 'No special precautions needed. Asthmatic students can participate fully.',
+    },
+    'Moderate': {
+        outdoor: 'Outdoor activity is fine. Limit to 1 hour for students who report discomfort.',
+        mask: 'Not required for most students. Keep masks available for children with asthma.',
+        ventilation: 'Windows can remain open. Consider closing if students report irritation.',
+        sensitive: 'Monitor students with asthma or allergies. Keep inhalers accessible.',
+    },
+    'Poor': {
+        outdoor: 'Limit outdoor PE to 30 minutes. No long-distance running. Move sports indoors if possible.',
+        mask: 'N95 masks recommended for outdoor activity. Provide masks for students who do not have them.',
+        ventilation: 'Close windows facing roads. Use air purifiers in classrooms if available.',
+        sensitive: 'Students with asthma should skip outdoor PE. Keep rescue medication ready. Inform parents.',
+    },
+    'Very Poor': {
+        outdoor: 'Cancel ALL outdoor PE, assembly, and recess. All activities must be held indoors.',
+        mask: 'N95 masks mandatory for any time spent outdoors (e.g., commute). Ensure proper fit for children.',
+        ventilation: 'All windows and doors must remain closed. Air purifiers should run continuously.',
+        sensitive: 'Alert parents of asthmatic/allergic students. Consider allowing these students to stay home.',
+    },
+    'Severe': {
+        outdoor: 'CANCEL ALL outdoor activities. Send advisory to parents. Consider shifting to online classes.',
+        mask: 'N95 mandatory even indoors if purifiers are not available. Check mask fit regularly.',
+        ventilation: 'Seal all openings. Run air purifiers on maximum. Wet-mop floors to reduce dust.',
+        sensitive: 'Strongly advise parents to keep vulnerable children home. Arrange online attendance.',
+    },
+};
+
+function renderHealthAdvisory(data) {
+    const band = data.predicted_aqi_band || 'Good';
+    const health = HEALTH_DATA[band] || HEALTH_DATA['Good'];
+
+    document.getElementById('health-outdoor-text').textContent = health.outdoor;
+    document.getElementById('health-mask-text').textContent = health.mask;
+    document.getElementById('health-ventilation-text').textContent = health.ventilation;
+    document.getElementById('health-sensitive-text').textContent = health.sensitive;
+
+    // Color the cards based on severity
+    const bandColor = data.color || '#64748b';
+    document.querySelectorAll('.health-card').forEach(card => {
+        card.style.borderColor = hexToRgba(bandColor, 0.25);
+    });
+}
+
+// ── Auto-Refresh ─────────────────────────────────────────────────────────
+
+function startAutoRefresh() {
+    refreshCountdown = REFRESH_INTERVAL;
+    if (refreshTimer) clearInterval(refreshTimer);
+
+    refreshTimer = setInterval(() => {
+        refreshCountdown--;
+        const mins = Math.floor(refreshCountdown / 60);
+        const secs = refreshCountdown % 60;
+        const el = document.getElementById('refresh-countdown');
+        if (el) el.textContent = `Auto-refresh in ${mins}:${secs.toString().padStart(2, '0')}`;
+
+        if (refreshCountdown <= 0) {
+            refreshCountdown = REFRESH_INTERVAL;
+            fetchLiveData(currentCity);
+        }
+    }, 1000);
+}
+
+// ── AWS SNS Alert Subscription ───────────────────────────────────────────
+
+async function handleAlertSubscribe(e) {
+    e.preventDefault();
+    const email = document.getElementById('alert-email').value;
+    const city = document.getElementById('alert-city').value;
+    const status = document.getElementById('alert-status');
+    const btn = document.getElementById('alert-submit');
+
+    btn.disabled = true;
+    btn.textContent = 'Subscribing...';
+
+    // If API is deployed, call the subscribe endpoint
+    if (API_BASE_URL) {
+        try {
+            const resp = await fetch(`${API_BASE_URL}/subscribe`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, city }),
+            });
+            if (resp.ok) {
+                status.textContent = `Subscribed! Check ${email} for a confirmation from AWS SNS.`;
+                status.className = 'alert-status success';
+            } else {
+                throw new Error('Subscription failed');
+            }
+        } catch (err) {
+            status.textContent = 'Could not subscribe. API may not be deployed yet.';
+            status.className = 'alert-status error';
+        }
+    } else {
+        // Demo mode — show success with explanation
+        status.innerHTML = `<strong>Demo:</strong> In production, AWS SNS sends a confirmation to <strong>${email}</strong> for <strong>${CITIES[city]?.name || city}</strong>. Deploy the SAM template to enable live alerts.`;
+        status.className = 'alert-status success';
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Subscribe via AWS SNS';
 }
