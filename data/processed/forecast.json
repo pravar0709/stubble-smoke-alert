@@ -1,381 +1,269 @@
 {
-  "forecast_date": "2024-12-31",
-  "generated_at": "2026-10-10T18:52:08.951391Z",
-  "today_date": "2024-12-30",
-  "today_aqi": 257,
-  "today_band": "Very Poor",
-  "predicted_aqi_band": "Very Poor",
-  "predicted_aqi_range": "201-300",
-  "action": "Move PE and assembly indoors. Keep windows and doors closed. Run air purifiers if available.",
-  "severity": 4,
-  "color": "#f44336",
-  "details": "Health effects likely for all students with prolonged exposure. Avoid all outdoor physical activity.",
-  "reason": "West-northwesterly winds at 11 km/h; no significant upwind fire activity detected; already elevated AQI of 257 today.",
+  "forecast_date": "2026-10-12",
+  "generated_at": "2026-10-11T12:15:55.948181",
+  "today_date": "2026-10-11",
+  "today_time": "12:15:55",
+  "today_aqi": 157,
+  "today_band": "Poor",
+  "today_pm25": 67.8,
+  "today_pm10": 224.4,
+  "predicted_aqi_band": "Poor",
+  "predicted_aqi_range": "101-200",
+  "action": "Shorten outdoor activity to 30 minutes. Sensitive students should wear masks.",
+  "severity": 3,
+  "color": "#ff9800",
+  "details": "Members of sensitive groups (asthma, respiratory conditions) may experience health effects. Limit prolonged outdoor exertion.",
+  "reason": "Easterly winds at 8 km/h; no significant upwind fire activity detected.",
   "model_type": "gradient_boosting_weather_only",
   "model_accuracy": 0.697,
   "baseline_accuracy": 0.7939,
+  "location": {
+    "name": "Delhi",
+    "lat": 28.6139,
+    "lon": 77.209
+  },
   "features_used": {
-    "wind_speed": 11.0,
-    "wind_dir": 290.0,
-    "fires_upwind": 0.0,
-    "aqi_today": 257,
-    "temperature": 18.1,
-    "humidity": 87.0
+    "wind_speed": 8.2,
+    "wind_dir": 98,
+    "fires_upwind": 0,
+    "aqi_today": 157,
+    "temperature": 30.4,
+    "humidity": 56,
+    "pm2_5": 67.8,
+    "pm10": 224.4
+  },
+  "weather_current": {
+    "temperature": 30.4,
+    "humidity": 56,
+    "wind_speed": 8.2,
+    "wind_direction": 98
+  },
+  "weather_tomorrow": {
+    "date": "2026-10-12",
+    "temp_max": 32.9,
+    "temp_min": 24.0,
+    "wind_speed_max": 5.5,
+    "wind_dir_dominant": 92,
+    "humidity_mean": 64
   },
   "fires": [
     {
-      "lat": 30.2575,
-      "lon": 76.4673,
-      "frp": 40.1,
-      "date": "2024-12-30"
+      "lat": 30.37,
+      "lon": 76.3113,
+      "frp": 13.7,
+      "date": "2026-10-11"
     },
     {
-      "lat": 30.3049,
-      "lon": 76.3549,
-      "frp": 7.6,
-      "date": "2024-12-30"
+      "lat": 30.2673,
+      "lon": 75.992,
+      "frp": 5.6,
+      "date": "2026-10-11"
     },
     {
-      "lat": 30.5769,
-      "lon": 76.5051,
-      "frp": 5.9,
-      "date": "2024-12-29"
-    },
-    {
-      "lat": 30.375,
-      "lon": 76.4077,
-      "frp": 5.0,
-      "date": "2024-12-30"
-    },
-    {
-      "lat": 30.5594,
-      "lon": 76.6208,
-      "frp": 5.3,
-      "date": "2024-12-30"
+      "lat": 30.3895,
+      "lon": 76.4802,
+      "frp": 28.3,
+      "date": "2026-10-10"
     },
     {
       "lat": 30.4625,
-      "lon": 76.1614,
-      "frp": 11.3,
-      "date": "2024-12-28"
+      "lon": 75.9261,
+      "frp": 35.3,
+      "date": "2026-10-10"
     },
     {
-      "lat": 30.5598,
-      "lon": 76.3561,
-      "frp": 14.0,
-      "date": "2024-12-28"
+      "lat": 30.1777,
+      "lon": 75.7309,
+      "frp": 12.1,
+      "date": "2026-10-10"
     },
     {
-      "lat": 30.3363,
-      "lon": 76.4433,
-      "frp": 43.7,
-      "date": "2024-12-28"
+      "lat": 30.206,
+      "lon": 75.9535,
+      "frp": 13.5,
+      "date": "2026-10-10"
     },
     {
-      "lat": 30.25,
-      "lon": 76.5321,
-      "frp": 9.4,
-      "date": "2024-12-28"
+      "lat": 30.3405,
+      "lon": 76.0762,
+      "frp": 7.5,
+      "date": "2026-10-11"
     },
     {
-      "lat": 30.3995,
-      "lon": 75.896,
-      "frp": 12.8,
-      "date": "2024-12-30"
+      "lat": 30.2489,
+      "lon": 75.7691,
+      "frp": 24.9,
+      "date": "2026-10-10"
     },
     {
-      "lat": 30.3534,
-      "lon": 75.6569,
-      "frp": 19.0,
-      "date": "2024-12-29"
+      "lat": 30.3962,
+      "lon": 76.1638,
+      "frp": 47.7,
+      "date": "2026-10-11"
     },
     {
-      "lat": 30.2784,
-      "lon": 75.631,
-      "frp": 6.4,
-      "date": "2024-12-29"
-    },
-    {
-      "lat": 30.2628,
-      "lon": 75.9723,
-      "frp": 46.5,
-      "date": "2024-12-29"
-    },
-    {
-      "lat": 30.0786,
-      "lon": 75.6025,
-      "frp": 17.2,
-      "date": "2024-12-30"
-    },
-    {
-      "lat": 30.2991,
-      "lon": 75.8529,
-      "frp": 32.3,
-      "date": "2024-12-30"
-    },
-    {
-      "lat": 30.2786,
-      "lon": 75.7822,
-      "frp": 8.4,
-      "date": "2024-12-28"
-    },
-    {
-      "lat": 29.9486,
-      "lon": 75.635,
-      "frp": 18.2,
-      "date": "2024-12-28"
-    },
-    {
-      "lat": 30.3173,
-      "lon": 75.9732,
-      "frp": 37.8,
-      "date": "2024-12-30"
-    },
-    {
-      "lat": 30.2417,
-      "lon": 75.0396,
-      "frp": 46.2,
-      "date": "2024-12-30"
-    },
-    {
-      "lat": 29.9838,
-      "lon": 75.1149,
-      "frp": 7.9,
-      "date": "2024-12-28"
-    },
-    {
-      "lat": 30.3918,
-      "lon": 75.135,
-      "frp": 31.6,
-      "date": "2024-12-29"
-    },
-    {
-      "lat": 30.1992,
-      "lon": 75.1005,
-      "frp": 10.4,
-      "date": "2024-12-29"
-    },
-    {
-      "lat": 30.2802,
-      "lon": 75.0604,
-      "frp": 15.6,
-      "date": "2024-12-29"
-    },
-    {
-      "lat": 30.7158,
-      "lon": 74.8119,
+      "lat": 30.2049,
+      "lon": 76.1426,
       "frp": 24.2,
-      "date": "2024-12-29"
+      "date": "2026-10-11"
     },
     {
-      "lat": 30.0029,
-      "lon": 74.9079,
-      "frp": 45.3,
-      "date": "2024-12-30"
+      "lat": 30.1277,
+      "lon": 74.9458,
+      "frp": 5.3,
+      "date": "2026-10-11"
     },
     {
-      "lat": 29.9591,
-      "lon": 77.0671,
-      "frp": 11.3,
-      "date": "2024-12-28"
+      "lat": 30.2233,
+      "lon": 74.9596,
+      "frp": 40.7,
+      "date": "2026-10-11"
     },
     {
-      "lat": 29.9117,
-      "lon": 76.9023,
-      "frp": 15.3,
-      "date": "2024-12-28"
+      "lat": 30.0802,
+      "lon": 75.0837,
+      "frp": 49.0,
+      "date": "2026-10-11"
     },
     {
-      "lat": 29.5687,
-      "lon": 76.9047,
-      "frp": 46.8,
-      "date": "2024-12-30"
+      "lat": 30.0977,
+      "lon": 75.1018,
+      "frp": 36.6,
+      "date": "2026-10-10"
     },
     {
-      "lat": 29.5985,
-      "lon": 76.9326,
-      "frp": 25.5,
-      "date": "2024-12-29"
+      "lat": 30.2134,
+      "lon": 74.6344,
+      "frp": 37.4,
+      "date": "2026-10-10"
     },
     {
       "lat": 29.6384,
-      "lon": 77.0926,
-      "frp": 10.5,
-      "date": "2024-12-30"
-    },
-    {
-      "lat": 29.5847,
-      "lon": 76.9309,
+      "lon": 76.9969,
       "frp": 15.3,
-      "date": "2024-12-29"
+      "date": "2026-10-11"
     },
     {
-      "lat": 31.3644,
-      "lon": 75.6092,
-      "frp": 5.3,
-      "date": "2024-12-28"
+      "lat": 29.8714,
+      "lon": 76.8535,
+      "frp": 47.7,
+      "date": "2026-10-10"
     },
     {
-      "lat": 31.1077,
-      "lon": 75.5069,
-      "frp": 10.4,
-      "date": "2024-12-28"
+      "lat": 29.651,
+      "lon": 76.9037,
+      "frp": 10.0,
+      "date": "2026-10-10"
     },
     {
-      "lat": 31.2475,
-      "lon": 75.4845,
-      "frp": 30.1,
-      "date": "2024-12-30"
+      "lat": 31.0922,
+      "lon": 75.7989,
+      "frp": 24.3,
+      "date": "2026-10-10"
     },
     {
-      "lat": 31.3177,
-      "lon": 75.5659,
-      "frp": 16.1,
-      "date": "2024-12-28"
+      "lat": 31.0437,
+      "lon": 75.4002,
+      "frp": 12.6,
+      "date": "2026-10-10"
     },
     {
-      "lat": 31.0322,
-      "lon": 75.566,
-      "frp": 17.8,
-      "date": "2024-12-30"
+      "lat": 31.1915,
+      "lon": 75.7409,
+      "frp": 6.1,
+      "date": "2026-10-11"
     },
     {
-      "lat": 31.2537,
-      "lon": 75.5574,
-      "frp": 20.5,
-      "date": "2024-12-30"
+      "lat": 31.5218,
+      "lon": 75.7224,
+      "frp": 13.7,
+      "date": "2026-10-10"
     },
     {
-      "lat": 31.2338,
-      "lon": 75.5068,
-      "frp": 27.0,
-      "date": "2024-12-29"
+      "lat": 31.2372,
+      "lon": 75.5723,
+      "frp": 31.7,
+      "date": "2026-10-11"
     },
     {
-      "lat": 31.4351,
-      "lon": 75.3975,
-      "frp": 39.3,
-      "date": "2024-12-28"
+      "lat": 31.6041,
+      "lon": 75.6922,
+      "frp": 30.9,
+      "date": "2026-10-11"
     },
     {
-      "lat": 31.4292,
-      "lon": 75.4771,
-      "frp": 26.2,
-      "date": "2024-12-29"
+      "lat": 31.4499,
+      "lon": 75.429,
+      "frp": 46.1,
+      "date": "2026-10-10"
     },
     {
-      "lat": 31.408,
-      "lon": 75.8986,
-      "frp": 9.1,
-      "date": "2024-12-30"
+      "lat": 30.8594,
+      "lon": 75.7767,
+      "frp": 8.9,
+      "date": "2026-10-10"
     },
     {
-      "lat": 31.3242,
-      "lon": 75.3904,
-      "frp": 36.3,
-      "date": "2024-12-28"
+      "lat": 31.0388,
+      "lon": 75.4646,
+      "frp": 18.7,
+      "date": "2026-10-10"
     },
     {
-      "lat": 30.7355,
-      "lon": 75.7577,
-      "frp": 37.0,
-      "date": "2024-12-28"
+      "lat": 31.0672,
+      "lon": 75.9252,
+      "frp": 29.0,
+      "date": "2026-10-10"
     },
     {
-      "lat": 30.9974,
-      "lon": 75.6766,
-      "frp": 12.8,
-      "date": "2024-12-30"
+      "lat": 30.8675,
+      "lon": 76.0832,
+      "frp": 34.1,
+      "date": "2026-10-11"
     },
     {
-      "lat": 30.9642,
-      "lon": 75.4895,
-      "frp": 42.7,
-      "date": "2024-12-28"
+      "lat": 29.9427,
+      "lon": 77.0887,
+      "frp": 27.4,
+      "date": "2026-10-11"
     },
     {
-      "lat": 30.7825,
-      "lon": 75.8117,
-      "frp": 46.6,
-      "date": "2024-12-29"
+      "lat": 30.1516,
+      "lon": 76.8572,
+      "frp": 38.2,
+      "date": "2026-10-10"
     },
     {
-      "lat": 30.7458,
-      "lon": 75.9712,
-      "frp": 12.9,
-      "date": "2024-12-30"
+      "lat": 29.9739,
+      "lon": 76.6625,
+      "frp": 21.5,
+      "date": "2026-10-10"
     },
     {
-      "lat": 30.6434,
-      "lon": 75.8778,
-      "frp": 49.8,
-      "date": "2024-12-29"
-    },
-    {
-      "lat": 29.989,
-      "lon": 76.9373,
-      "frp": 20.3,
-      "date": "2024-12-28"
-    },
-    {
-      "lat": 30.0724,
-      "lon": 76.8908,
-      "frp": 43.5,
-      "date": "2024-12-29"
-    },
-    {
-      "lat": 30.0426,
-      "lon": 77.0026,
-      "frp": 8.8,
-      "date": "2024-12-29"
-    },
-    {
-      "lat": 30.0781,
-      "lon": 77.0883,
-      "frp": 21.8,
-      "date": "2024-12-30"
-    },
-    {
-      "lat": 29.9762,
-      "lon": 76.6375,
-      "frp": 36.1,
-      "date": "2024-12-30"
-    },
-    {
-      "lat": 30.0602,
-      "lon": 76.6768,
+      "lat": 30.4493,
+      "lon": 76.75,
       "frp": 15.7,
-      "date": "2024-12-30"
+      "date": "2026-10-10"
     },
     {
-      "lat": 29.8806,
-      "lon": 76.6531,
-      "frp": 38.5,
-      "date": "2024-12-28"
+      "lat": 30.3636,
+      "lon": 77.0893,
+      "frp": 34.2,
+      "date": "2026-10-11"
     },
     {
-      "lat": 30.4427,
-      "lon": 76.497,
-      "frp": 27.9,
-      "date": "2024-12-29"
-    },
-    {
-      "lat": 30.2466,
-      "lon": 76.6576,
-      "frp": 48.8,
-      "date": "2024-12-30"
-    },
-    {
-      "lat": 30.5166,
-      "lon": 76.7755,
-      "frp": 24.5,
-      "date": "2024-12-30"
+      "lat": 30.1502,
+      "lon": 76.8128,
+      "frp": 37.1,
+      "date": "2026-10-10"
     }
   ],
   "delhi": {
     "lat": 28.6139,
     "lon": 77.209
   },
-  "disclaimer": "This is an experimental forecast for educational purposes. Always verify with official CPCB bulletins before making school-level decisions.",
-  "data_source": "synthetic"
+  "disclaimer": "This forecast uses real-time AQI from Open-Meteo (CAMS model) and real weather data. The ML prediction is experimental. Always verify with official CPCB bulletins.",
+  "data_source": "live",
+  "aqi_source": "Open-Meteo Air Quality API (CAMS global model)",
+  "weather_source": "Open-Meteo Weather Forecast API (ECMWF model)"
 }

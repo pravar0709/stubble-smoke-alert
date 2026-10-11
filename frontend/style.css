@@ -66,6 +66,87 @@ body {
 
 .hidden { display: none !important; }
 
+/* ── City Selector ────────────────────────────────────────── */
+.city-select {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-primary);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    padding: 0.4rem 0.6rem;
+    font-family: var(--font);
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 24px;
+}
+
+.city-select:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.city-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.city-select option {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+/* ── AWS Badge ─────────────────────────────────────────────── */
+.aws-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 153, 0, 0.06);
+    border: 1px solid rgba(255, 153, 0, 0.2);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin: 0.5rem 0;
+}
+
+.aws-icon {
+    font-size: 1.2rem;
+    color: #ff9900;
+}
+
+.aws-badge strong {
+    color: #ff9900;
+}
+
+/* ── Band Subtitle ─────────────────────────────────────────── */
+.band-subtitle {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+}
+
+/* ── Today Band Label ──────────────────────────────────────── */
+.today-band-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* ── PM Items Highlight ────────────────────────────────────── */
+.pm-item {
+    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+}
+
 /* ── Header ────────────────────────────────────────────────── */
 #app-header {
     background: rgba(10, 14, 26, 0.9);
@@ -143,6 +224,54 @@ main {
     display: flex;
     flex-direction: column;
     gap: 2rem;
+}
+
+/* ── Live Banner ───────────────────────────────────────────── */
+.live-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius);
+    background: rgba(16, 185, 129, 0.06);
+    border: 1px solid rgba(16, 185, 129, 0.15);
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+}
+
+.live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+    animation: pulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+.live-time {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    font-size: 1rem;
+    color: #10b981;
+}
+
+.live-date {
+    color: var(--text-secondary);
+}
+
+.live-location {
+    margin-left: auto;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.generated-at {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-align: right;
+    margin-top: 0.5rem;
+    font-style: italic;
 }
 
 /* ── Forecast Card ─────────────────────────────────────────── */

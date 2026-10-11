@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Stubble Smoke Alert: Next-day AQI early-warning system for Delhi-NCR schools. Predicts tomorrow's air quality from upwind fire detections and weather data.">
-    <title>Stubble Smoke Alert | Delhi-NCR School Air Quality Forecast</title>
+    <meta name="description" content="Stubble Smoke Alert: Real-time AQI early-warning system for Indian schools. Live air quality data from Open-Meteo, ML-powered next-day prediction, deployed on AWS.">
+    <title>Stubble Smoke Alert | Real-Time AQI Forecast for Indian Schools</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,22 +31,51 @@
                 </div>
                 <div>
                     <h1>Stubble Smoke Alert</h1>
-                    <p class="subtitle">Next-Day AQI Forecast for Delhi-NCR Schools</p>
+                    <p class="subtitle">Real-Time AQI for Indian Schools</p>
                 </div>
             </div>
             <div class="header-meta" id="header-meta">
+                <!-- Location Picker -->
+                <select id="city-select" class="city-select" aria-label="Select city">
+                    <option value="delhi">Delhi</option>
+                    <option value="noida">Noida</option>
+                    <option value="gurugram">Gurugram</option>
+                    <option value="faridabad">Faridabad</option>
+                    <option value="ghaziabad">Ghaziabad</option>
+                    <option value="lucknow">Lucknow</option>
+                    <option value="chandigarh">Chandigarh</option>
+                    <option value="jaipur">Jaipur</option>
+                    <option value="mumbai">Mumbai</option>
+                    <option value="kolkata">Kolkata</option>
+                    <option value="bengaluru">Bengaluru</option>
+                    <option value="hyderabad">Hyderabad</option>
+                    <option value="chennai">Chennai</option>
+                    <option value="pune">Pune</option>
+                    <option value="ahmedabad">Ahmedabad</option>
+                    <option value="patna">Patna</option>
+                    <option value="varanasi">Varanasi</option>
+                    <option value="agra">Agra</option>
+                </select>
                 <span class="badge badge-data" id="data-source-badge">Loading...</span>
             </div>
         </div>
     </header>
 
     <main>
+        <!-- Live Clock Banner -->
+        <div class="live-banner" id="live-banner">
+            <div class="live-dot"></div>
+            <span class="live-time" id="live-time">--:--:--</span>
+            <span class="live-date" id="live-date">Loading...</span>
+            <span class="live-location" id="live-location"></span>
+        </div>
+
         <!-- Forecast Card -->
         <section id="forecast-section" class="forecast-section">
             <div class="forecast-card glass" id="forecast-card">
                 <div class="forecast-loading" id="forecast-loading">
                     <div class="spinner"></div>
-                    <p>Loading forecast...</p>
+                    <p>Fetching real-time AQI data...</p>
                 </div>
                 <div class="forecast-content hidden" id="forecast-content">
                     <div class="forecast-header">
@@ -55,12 +84,14 @@
                             <span class="forecast-date" id="forecast-date">--</span>
                         </div>
                         <div class="today-info">
-                            <span class="label">Today's AQI</span>
+                            <span class="label">Current AQI</span>
                             <span class="today-aqi" id="today-aqi">--</span>
+                            <span class="today-band-label" id="today-band-label"></span>
                         </div>
                     </div>
 
                     <div class="band-display" id="band-display">
+                        <div class="band-subtitle">Tomorrow's Predicted Band</div>
                         <div class="band-label" id="band-label">--</div>
                         <div class="band-range" id="band-range">AQI --</div>
                     </div>
@@ -79,6 +110,14 @@
                     </div>
 
                     <div class="details-row" id="details-row">
+                        <div class="detail-item pm-item">
+                            <span class="detail-label">PM2.5</span>
+                            <span class="detail-value" id="pm25-info">--</span>
+                        </div>
+                        <div class="detail-item pm-item">
+                            <span class="detail-label">PM10</span>
+                            <span class="detail-value" id="pm10-info">--</span>
+                        </div>
                         <div class="detail-item">
                             <span class="detail-label">Wind</span>
                             <span class="detail-value" id="wind-info">--</span>
@@ -96,6 +135,7 @@
                             <span class="detail-value" id="fires-info">--</span>
                         </div>
                     </div>
+                    <div class="generated-at" id="generated-at"></div>
                 </div>
             </div>
         </section>
@@ -103,8 +143,8 @@
         <!-- Map Section -->
         <section class="map-section">
             <div class="section-header">
-                <h2>Upwind Fire Detections</h2>
-                <p class="section-desc">Recent satellite fire detections in Punjab, Haryana & Western UP. Wind direction shown relative to Delhi.</p>
+                <h2>Upwind Fire Detections &amp; Location</h2>
+                <p class="section-desc">Satellite fire detections in Punjab, Haryana & Western UP. Selected city marker and wind direction shown.</p>
             </div>
             <div class="map-container glass" id="map-container">
                 <div id="map"></div>
@@ -114,7 +154,7 @@
                         <span class="legend-dot fire"></span> Fire Detection
                     </div>
                     <div class="legend-item">
-                        <span class="legend-dot delhi"></span> Delhi
+                        <span class="legend-dot delhi"></span> Selected City
                     </div>
                     <div class="legend-item">
                         <span class="legend-line wind"></span> Wind Direction
@@ -125,7 +165,7 @@
 
         <!-- AQI Scale Reference -->
         <section class="scale-section">
-            <h2>CPCB AQI Scale & School Actions</h2>
+            <h2>CPCB AQI Scale &amp; School Actions</h2>
             <div class="scale-grid" id="scale-grid">
                 <div class="scale-item" data-band="Good">
                     <div class="scale-color" style="background: #4caf50;"></div>
@@ -165,7 +205,7 @@
             </div>
         </section>
 
-        <!-- Model Info -->
+        <!-- Model & AWS Info -->
         <section class="model-section glass">
             <h2>About This Forecast</h2>
             <div class="model-info-grid">
@@ -186,13 +226,17 @@
                     <span class="stat-value" id="data-source">--</span>
                 </div>
             </div>
+            <div class="aws-badge">
+                <span class="aws-icon">&#9729;</span>
+                <span>Powered by <strong>AWS Lambda</strong> + <strong>S3</strong> + <strong>API Gateway</strong> | Deployed via <strong>AWS SAM</strong></span>
+            </div>
             <p class="disclaimer" id="disclaimer">--</p>
         </section>
     </main>
 
     <footer>
         <p>Built for <strong>AWS Bharat Builds Tour</strong> &mdash; Environmental Hacks, Air Track</p>
-        <p class="footer-small">Data: Open-Meteo (CC BY 4.0), NASA FIRMS. This is an experimental tool. Always verify with <a href="https://cpcb.nic.in/" target="_blank" rel="noopener">CPCB</a>.</p>
+        <p class="footer-small">Data: Open-Meteo Air Quality API (CC BY 4.0), NASA FIRMS. This is an experimental tool. Always verify with <a href="https://cpcb.nic.in/" target="_blank" rel="noopener">CPCB</a>.</p>
     </footer>
 
     <script src="app.js"></script>
