@@ -6,26 +6,78 @@
  * Falls back to server forecast.json for ML predictions and fire data.
  */
 
-// ── City Database ─────────────────────────────────────────────────────────
+// ── City Database (65 major Indian cities) ────────────────────────────────
 const CITIES = {
-    delhi:      { name: 'Delhi',      lat: 28.6139, lon: 77.2090 },
-    noida:      { name: 'Noida',      lat: 28.5355, lon: 77.3910 },
-    gurugram:   { name: 'Gurugram',   lat: 28.4595, lon: 77.0266 },
-    faridabad:  { name: 'Faridabad',  lat: 28.4089, lon: 77.3178 },
-    ghaziabad:  { name: 'Ghaziabad',  lat: 28.6692, lon: 77.4538 },
-    lucknow:    { name: 'Lucknow',    lat: 26.8467, lon: 80.9462 },
-    chandigarh: { name: 'Chandigarh', lat: 30.7333, lon: 76.7794 },
-    jaipur:     { name: 'Jaipur',     lat: 26.9124, lon: 75.7873 },
-    mumbai:     { name: 'Mumbai',     lat: 19.0760, lon: 72.8777 },
-    kolkata:    { name: 'Kolkata',    lat: 22.5726, lon: 88.3639 },
-    bengaluru:  { name: 'Bengaluru',  lat: 12.9716, lon: 77.5946 },
-    hyderabad:  { name: 'Hyderabad',  lat: 17.3850, lon: 78.4867 },
-    chennai:    { name: 'Chennai',    lat: 13.0827, lon: 80.2707 },
-    pune:       { name: 'Pune',       lat: 18.5204, lon: 73.8567 },
-    ahmedabad:  { name: 'Ahmedabad',  lat: 23.0225, lon: 72.5714 },
-    patna:      { name: 'Patna',      lat: 25.6093, lon: 85.1376 },
-    varanasi:   { name: 'Varanasi',   lat: 25.3176, lon: 82.9739 },
-    agra:       { name: 'Agra',       lat: 27.1767, lon: 78.0081 },
+    // Delhi NCR
+    delhi:        { name: 'Delhi',          lat: 28.6139, lon: 77.2090, state: 'Delhi' },
+    noida:        { name: 'Noida',          lat: 28.5355, lon: 77.3910, state: 'Uttar Pradesh' },
+    gurugram:     { name: 'Gurugram',       lat: 28.4595, lon: 77.0266, state: 'Haryana' },
+    faridabad:    { name: 'Faridabad',      lat: 28.4089, lon: 77.3178, state: 'Haryana' },
+    ghaziabad:    { name: 'Ghaziabad',      lat: 28.6692, lon: 77.4538, state: 'Uttar Pradesh' },
+    greaternoida: { name: 'Greater Noida',  lat: 28.4744, lon: 77.5040, state: 'Uttar Pradesh' },
+    // North India
+    chandigarh:   { name: 'Chandigarh',     lat: 30.7333, lon: 76.7794, state: 'Chandigarh' },
+    ludhiana:     { name: 'Ludhiana',       lat: 30.9010, lon: 75.8573, state: 'Punjab' },
+    amritsar:     { name: 'Amritsar',       lat: 31.6340, lon: 74.8723, state: 'Punjab' },
+    jalandhar:    { name: 'Jalandhar',      lat: 31.3260, lon: 75.5762, state: 'Punjab' },
+    patiala:      { name: 'Patiala',        lat: 30.3398, lon: 76.3869, state: 'Punjab' },
+    shimla:       { name: 'Shimla',         lat: 31.1048, lon: 77.1734, state: 'Himachal Pradesh' },
+    dehradun:     { name: 'Dehradun',       lat: 30.3165, lon: 78.0322, state: 'Uttarakhand' },
+    jammu:        { name: 'Jammu',          lat: 32.7266, lon: 74.8570, state: 'J&K' },
+    srinagar:     { name: 'Srinagar',       lat: 34.0837, lon: 74.7973, state: 'J&K' },
+    // UP & Bihar
+    lucknow:      { name: 'Lucknow',        lat: 26.8467, lon: 80.9462, state: 'Uttar Pradesh' },
+    kanpur:       { name: 'Kanpur',         lat: 26.4499, lon: 80.3319, state: 'Uttar Pradesh' },
+    agra:         { name: 'Agra',           lat: 27.1767, lon: 78.0081, state: 'Uttar Pradesh' },
+    varanasi:     { name: 'Varanasi',       lat: 25.3176, lon: 82.9739, state: 'Uttar Pradesh' },
+    prayagraj:    { name: 'Prayagraj',      lat: 25.4358, lon: 81.8463, state: 'Uttar Pradesh' },
+    meerut:       { name: 'Meerut',         lat: 28.9845, lon: 77.7064, state: 'Uttar Pradesh' },
+    bareilly:     { name: 'Bareilly',       lat: 28.3670, lon: 79.4304, state: 'Uttar Pradesh' },
+    gorakhpur:    { name: 'Gorakhpur',      lat: 26.7606, lon: 83.3732, state: 'Uttar Pradesh' },
+    patna:        { name: 'Patna',          lat: 25.6093, lon: 85.1376, state: 'Bihar' },
+    muzaffarpur:  { name: 'Muzaffarpur',    lat: 26.1209, lon: 85.3647, state: 'Bihar' },
+    gaya:         { name: 'Gaya',           lat: 24.7955, lon: 84.9994, state: 'Bihar' },
+    // Rajasthan
+    jaipur:       { name: 'Jaipur',         lat: 26.9124, lon: 75.7873, state: 'Rajasthan' },
+    jodhpur:      { name: 'Jodhpur',        lat: 26.2389, lon: 73.0243, state: 'Rajasthan' },
+    udaipur:      { name: 'Udaipur',        lat: 24.5854, lon: 73.7125, state: 'Rajasthan' },
+    kota:         { name: 'Kota',           lat: 25.2138, lon: 75.8648, state: 'Rajasthan' },
+    // West India
+    mumbai:       { name: 'Mumbai',         lat: 19.0760, lon: 72.8777, state: 'Maharashtra' },
+    pune:         { name: 'Pune',           lat: 18.5204, lon: 73.8567, state: 'Maharashtra' },
+    nagpur:       { name: 'Nagpur',         lat: 21.1458, lon: 79.0882, state: 'Maharashtra' },
+    nashik:       { name: 'Nashik',         lat: 19.9975, lon: 73.7898, state: 'Maharashtra' },
+    thane:        { name: 'Thane',          lat: 19.2183, lon: 72.9781, state: 'Maharashtra' },
+    ahmedabad:    { name: 'Ahmedabad',      lat: 23.0225, lon: 72.5714, state: 'Gujarat' },
+    surat:        { name: 'Surat',          lat: 21.1702, lon: 72.8311, state: 'Gujarat' },
+    vadodara:     { name: 'Vadodara',       lat: 22.3072, lon: 73.1812, state: 'Gujarat' },
+    rajkot:       { name: 'Rajkot',         lat: 22.3039, lon: 70.8022, state: 'Gujarat' },
+    // South India
+    bengaluru:    { name: 'Bengaluru',      lat: 12.9716, lon: 77.5946, state: 'Karnataka' },
+    mysuru:       { name: 'Mysuru',         lat: 12.2958, lon: 76.6394, state: 'Karnataka' },
+    chennai:      { name: 'Chennai',        lat: 13.0827, lon: 80.2707, state: 'Tamil Nadu' },
+    coimbatore:   { name: 'Coimbatore',     lat: 11.0168, lon: 76.9558, state: 'Tamil Nadu' },
+    madurai:      { name: 'Madurai',        lat: 9.9252,  lon: 78.1198, state: 'Tamil Nadu' },
+    hyderabad:    { name: 'Hyderabad',      lat: 17.3850, lon: 78.4867, state: 'Telangana' },
+    visakhapatnam:{ name: 'Visakhapatnam',  lat: 17.6868, lon: 83.2185, state: 'Andhra Pradesh' },
+    vijayawada:   { name: 'Vijayawada',     lat: 16.5062, lon: 80.6480, state: 'Andhra Pradesh' },
+    kochi:        { name: 'Kochi',          lat: 9.9312,  lon: 76.2673, state: 'Kerala' },
+    thiruvananthapuram: { name: 'Thiruvananthapuram', lat: 8.5241, lon: 76.9366, state: 'Kerala' },
+    // East India
+    kolkata:      { name: 'Kolkata',        lat: 22.5726, lon: 88.3639, state: 'West Bengal' },
+    bhubaneswar:  { name: 'Bhubaneswar',    lat: 20.2961, lon: 85.8245, state: 'Odisha' },
+    ranchi:       { name: 'Ranchi',         lat: 23.3441, lon: 85.3096, state: 'Jharkhand' },
+    jamshedpur:   { name: 'Jamshedpur',     lat: 22.8046, lon: 86.2029, state: 'Jharkhand' },
+    // Central India
+    bhopal:       { name: 'Bhopal',         lat: 23.2599, lon: 77.4126, state: 'Madhya Pradesh' },
+    indore:       { name: 'Indore',         lat: 22.7196, lon: 75.8577, state: 'Madhya Pradesh' },
+    raipur:       { name: 'Raipur',         lat: 21.2514, lon: 81.6296, state: 'Chhattisgarh' },
+    // Northeast
+    guwahati:     { name: 'Guwahati',       lat: 26.1445, lon: 91.7362, state: 'Assam' },
+    imphal:       { name: 'Imphal',         lat: 24.8170, lon: 93.9368, state: 'Manipur' },
+    shillong:     { name: 'Shillong',       lat: 25.5788, lon: 91.8933, state: 'Meghalaya' },
+    // Others
+    panaji:       { name: 'Panaji',         lat: 15.4909, lon: 73.8278, state: 'Goa' },
 };
 
 // AQI band definitions (matching CPCB India standard)
@@ -56,13 +108,7 @@ let refreshCountdown = REFRESH_INTERVAL;
 document.addEventListener('DOMContentLoaded', () => {
     initMap();
     startLiveClock();
-
-    // City selector
-    const selector = document.getElementById('city-select');
-    selector.addEventListener('change', (e) => {
-        currentCity = e.target.value;
-        fetchLiveData(currentCity);
-    });
+    initCitySearch();
 
     // Load data for default city
     fetchLiveData(currentCity);
@@ -72,7 +118,99 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // SNS alert form
     document.getElementById('alert-form').addEventListener('submit', handleAlertSubscribe);
+
+    // WhatsApp buttons
+    document.getElementById('btn-copy-whatsapp').addEventListener('click', copyWhatsAppMessage);
+    document.getElementById('btn-share-whatsapp').addEventListener('click', shareWhatsApp);
 });
+
+// ── City Search (Autocomplete) ────────────────────────────────────────────
+
+function initCitySearch() {
+    const input = document.getElementById('city-search');
+    const dropdown = document.getElementById('city-dropdown');
+    let selectedIdx = -1;
+
+    // Build sorted city list for search
+    const cityList = Object.entries(CITIES)
+        .map(([key, c]) => ({ key, name: c.name, state: c.state || '' }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+
+    input.addEventListener('focus', () => {
+        showCityResults(cityList, '', dropdown);
+        dropdown.classList.add('show');
+        input.select();
+    });
+
+    input.addEventListener('input', () => {
+        const q = input.value.trim().toLowerCase();
+        const filtered = cityList.filter(c =>
+            c.name.toLowerCase().includes(q) || c.state.toLowerCase().includes(q)
+        );
+        showCityResults(filtered, q, dropdown);
+        dropdown.classList.add('show');
+        selectedIdx = -1;
+    });
+
+    input.addEventListener('keydown', (e) => {
+        const items = dropdown.querySelectorAll('.city-option');
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            selectedIdx = Math.min(selectedIdx + 1, items.length - 1);
+            items.forEach((it, i) => it.classList.toggle('active', i === selectedIdx));
+            items[selectedIdx]?.scrollIntoView({ block: 'nearest' });
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            selectedIdx = Math.max(selectedIdx - 1, 0);
+            items.forEach((it, i) => it.classList.toggle('active', i === selectedIdx));
+            items[selectedIdx]?.scrollIntoView({ block: 'nearest' });
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (selectedIdx >= 0 && items[selectedIdx]) {
+                items[selectedIdx].click();
+            }
+        } else if (e.key === 'Escape') {
+            dropdown.classList.remove('show');
+            input.blur();
+        }
+    });
+
+    // Close dropdown on outside click
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.city-search-wrap')) {
+            dropdown.classList.remove('show');
+        }
+    });
+}
+
+function showCityResults(cities, query, dropdown) {
+    if (cities.length === 0) {
+        dropdown.innerHTML = '<div class="city-option" style="color:var(--text-muted)">No cities found</div>';
+        return;
+    }
+    dropdown.innerHTML = cities.map(c => {
+        let display = c.name;
+        if (query && query.length > 0) {
+            const idx = c.name.toLowerCase().indexOf(query);
+            if (idx >= 0) {
+                display = c.name.slice(0, idx) + '<mark>' + c.name.slice(idx, idx + query.length) + '</mark>' + c.name.slice(idx + query.length);
+            }
+        }
+        return `<div class="city-option" data-key="${c.key}"><span>${display}</span><span class="city-state">${c.state}</span></div>`;
+    }).join('');
+
+    dropdown.querySelectorAll('.city-option').forEach(el => {
+        el.addEventListener('click', () => {
+            const key = el.dataset.key;
+            if (key && CITIES[key]) {
+                currentCity = key;
+                document.getElementById('city-search').value = CITIES[key].name;
+                dropdown.classList.remove('show');
+                fetchLiveData(key);
+            }
+        });
+    });
+}
 
 // ── Live Clock ────────────────────────────────────────────────────────────
 function startLiveClock() {
@@ -125,6 +263,8 @@ async function fetchLiveData(cityKey) {
         renderMap(forecast, city);
         renderModelInfo(forecast);
         renderHealthAdvisory(forecast);
+        renderTimeline(forecast);
+        renderWhatsAppMessage(forecast, city);
 
         // Fetch and render 24-hour trend
         fetchAndRenderTrend(city.lat, city.lon);
@@ -682,4 +822,120 @@ async function handleAlertSubscribe(e) {
 
     btn.disabled = false;
     btn.textContent = 'Subscribe via AWS SNS';
+}
+
+// ── School Day Impact Timeline ───────────────────────────────────────────
+
+const SCHOOL_PERIODS = [
+    { time: '7:00 AM',  label: 'Bus Pickup',      icon: '🚌', key: 'commute' },
+    { time: '8:00 AM',  label: 'Morning Assembly', icon: '🏫', key: 'outdoor' },
+    { time: '9:00 AM',  label: 'Classes Begin',    icon: '📚', key: 'indoor' },
+    { time: '10:30 AM', label: 'PE / Sports',      icon: '⚽', key: 'pe' },
+    { time: '12:30 PM', label: 'Lunch Break',      icon: '🍱', key: 'outdoor' },
+    { time: '2:00 PM',  label: 'Afternoon Class',  icon: '✏️', key: 'indoor' },
+    { time: '3:00 PM',  label: 'Dismissal',        icon: '🎒', key: 'commute' },
+];
+
+const PERIOD_ACTIONS = {
+    'Good': {
+        commute: 'Normal commute. Windows open.',
+        outdoor: 'Normal outdoor activity.',
+        indoor: 'Open windows for ventilation.',
+        pe: 'All sports can proceed.',
+    },
+    'Moderate': {
+        commute: 'Normal. Keep masks handy.',
+        outdoor: 'Normal. Watch sensitive kids.',
+        indoor: 'Keep windows open.',
+        pe: 'Full activity. Monitor asthma.',
+    },
+    'Poor': {
+        commute: 'Wear masks during commute.',
+        outdoor: 'Limit to 20 min. Masks on.',
+        indoor: 'Close road-facing windows.',
+        pe: 'Shorten to 20 min. Indoor if possible.',
+    },
+    'Very Poor': {
+        commute: 'N95 masks required.',
+        outdoor: 'CANCEL. Move indoors.',
+        indoor: 'All windows shut. Run purifiers.',
+        pe: 'CANCELLED. Indoor games only.',
+    },
+    'Severe': {
+        commute: 'Consider online school.',
+        outdoor: 'CANCELLED. Stay inside.',
+        indoor: 'Seal doors. Max purifiers.',
+        pe: 'CANCELLED. No physical activity.',
+    },
+};
+
+function renderTimeline(data) {
+    const band = data.predicted_aqi_band || 'Good';
+    const actions = PERIOD_ACTIONS[band] || PERIOD_ACTIONS['Good'];
+    const bandColor = data.color || '#64748b';
+
+    const container = document.getElementById('timeline-container');
+    container.innerHTML = SCHOOL_PERIODS.map(period => {
+        const action = actions[period.key] || 'Normal activity';
+        const isCancelled = action.includes('CANCEL');
+        const dotColor = isCancelled ? '#f44336' : bandColor;
+
+        return `
+            <div class="timeline-slot" style="background: ${hexToRgba(bandColor, 0.04)}; border-bottom: 3px solid ${dotColor};">
+                <div class="timeline-time">${period.time}</div>
+                <div class="timeline-icon">${period.icon}</div>
+                <div class="timeline-period">${period.label}</div>
+                <div class="status-dot" style="background: ${dotColor};"></div>
+                <div class="timeline-action">${action}</div>
+            </div>
+        `;
+    }).join('');
+}
+
+// ── WhatsApp Parent Alert ────────────────────────────────────────────────
+
+function renderWhatsAppMessage(data, city) {
+    const band = data.predicted_aqi_band || '--';
+    const aqi = data.today_aqi || '--';
+    const pm25 = data.features_used?.pm2_5?.toFixed(1) || '--';
+    const action = data.action || '';
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const dateStr = tomorrow.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+
+    const msg = `🏫 *SCHOOL AIR QUALITY ALERT*
+📍 ${city.name}${city.state ? ', ' + city.state : ''}
+📅 ${dateStr}
+
+🌫️ Current AQI: *${aqi}* (${band})
+🔬 PM2.5: ${pm25} µg/m³
+📊 Tomorrow's Forecast: *${band}*
+
+⚠️ *Recommended Action:*
+${action}
+
+${band === 'Severe' || band === 'Very Poor' ? '🚨 PLEASE NOTE: Outdoor activities will be restricted. Ensure your child carries an N95 mask.' : ''}
+✅ Stay updated at stubblesmokealert.in
+_Powered by Stubble Smoke Alert | AWS_`;
+
+    document.getElementById('whatsapp-message').textContent = msg;
+}
+
+function copyWhatsAppMessage() {
+    const msg = document.getElementById('whatsapp-message').textContent;
+    navigator.clipboard.writeText(msg).then(() => {
+        const btn = document.getElementById('btn-copy-whatsapp');
+        btn.classList.add('copied');
+        btn.innerHTML = '&#10003; Copied!';
+        setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.innerHTML = '&#128203; Copy Message';
+        }, 2000);
+    });
+}
+
+function shareWhatsApp() {
+    const msg = document.getElementById('whatsapp-message').textContent;
+    const encoded = encodeURIComponent(msg);
+    window.open(`https://wa.me/?text=${encoded}`, '_blank');
 }

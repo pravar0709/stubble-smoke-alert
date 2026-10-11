@@ -38,27 +38,11 @@
                 </div>
             </div>
             <div class="header-meta" id="header-meta">
-                <!-- Location Picker -->
-                <select id="city-select" class="city-select" aria-label="Select city">
-                    <option value="delhi">Delhi</option>
-                    <option value="noida">Noida</option>
-                    <option value="gurugram">Gurugram</option>
-                    <option value="faridabad">Faridabad</option>
-                    <option value="ghaziabad">Ghaziabad</option>
-                    <option value="lucknow">Lucknow</option>
-                    <option value="chandigarh">Chandigarh</option>
-                    <option value="jaipur">Jaipur</option>
-                    <option value="mumbai">Mumbai</option>
-                    <option value="kolkata">Kolkata</option>
-                    <option value="bengaluru">Bengaluru</option>
-                    <option value="hyderabad">Hyderabad</option>
-                    <option value="chennai">Chennai</option>
-                    <option value="pune">Pune</option>
-                    <option value="ahmedabad">Ahmedabad</option>
-                    <option value="patna">Patna</option>
-                    <option value="varanasi">Varanasi</option>
-                    <option value="agra">Agra</option>
-                </select>
+                <!-- Searchable City Input -->
+                <div class="city-search-wrap">
+                    <input type="text" id="city-search" class="city-search" placeholder="Search 65+ cities..." value="Delhi" autocomplete="off" aria-label="Search city">
+                    <div class="city-dropdown" id="city-dropdown"></div>
+                </div>
                 <span class="badge badge-data" id="data-source-badge">Loading...</span>
             </div>
         </div>
@@ -140,6 +124,30 @@
                         </div>
                     </div>
                     <div class="generated-at" id="generated-at"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- UNIQUE: School Day Impact Timeline -->
+        <section class="timeline-section">
+            <div class="section-header">
+                <h2>&#127979; School Day Impact Timeline</h2>
+                <p class="section-desc">How tomorrow's predicted AQI affects each part of the school day. No other AQI tool provides this.</p>
+            </div>
+            <div class="timeline-container" id="timeline-container">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+
+        <!-- UNIQUE: WhatsApp Parent Alert -->
+        <section class="whatsapp-section glass">
+            <div class="whatsapp-content">
+                <h2>&#128241; Parent Alert Message</h2>
+                <p class="section-desc">Ready-to-share message for your school WhatsApp group. One click to copy.</p>
+                <div class="whatsapp-message" id="whatsapp-message">Loading...</div>
+                <div class="whatsapp-actions">
+                    <button class="btn-copy" id="btn-copy-whatsapp">&#128203; Copy Message</button>
+                    <button class="btn-whatsapp" id="btn-share-whatsapp">&#128172; Open WhatsApp</button>
                 </div>
             </div>
         </section>

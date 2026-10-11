@@ -66,40 +66,192 @@ body {
 
 .hidden { display: none !important; }
 
-/* ── City Selector ────────────────────────────────────────── */
-.city-select {
+/* ── City Search Bar ───────────────────────────────────────── */
+.city-search-wrap {
+    position: relative;
+}
+
+.city-search {
     background: rgba(255, 255, 255, 0.06);
     color: var(--text-primary);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-sm);
-    padding: 0.4rem 0.6rem;
+    padding: 0.45rem 0.7rem;
     font-family: var(--font);
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     font-weight: 500;
-    cursor: pointer;
+    width: 180px;
     outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    appearance: none;
-    -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 8px center;
-    padding-right: 24px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, width 0.3s ease;
 }
 
-.city-select:hover {
-    border-color: var(--accent);
-    box-shadow: 0 0 12px var(--accent-glow);
-}
-
-.city-select:focus {
+.city-search:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 2px var(--accent-glow);
+    width: 240px;
 }
 
-.city-select option {
+.city-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
     background: var(--bg-secondary);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    max-height: 280px;
+    overflow-y: auto;
+    z-index: 200;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    margin-top: 4px;
+}
+
+.city-dropdown.show { display: block; }
+
+.city-option {
+    padding: 0.5rem 0.7rem;
+    cursor: pointer;
+    font-size: 0.82rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.15s ease;
+}
+
+.city-option:hover, .city-option.active {
+    background: rgba(255, 153, 0, 0.12);
+}
+
+.city-option .city-state {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+.city-option mark {
+    background: rgba(255, 153, 0, 0.3);
+    color: inherit;
+    border-radius: 2px;
+    padding: 0 1px;
+}
+
+/* ── School Day Timeline ───────────────────────────────────── */
+.timeline-section { width: 100%; }
+
+.timeline-container {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+
+.timeline-slot {
+    flex: 1;
+    min-width: 140px;
+    padding: 1rem 0.75rem;
+    text-align: center;
+    border-right: 1px solid var(--glass-border);
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+.timeline-slot:last-child { border-right: none; }
+
+.timeline-slot:hover { transform: translateY(-2px); }
+
+.timeline-time {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.timeline-period {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin: 0.3rem 0;
+}
+
+.timeline-icon { font-size: 1.5rem; margin: 0.4rem 0; }
+
+.timeline-action {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.timeline-slot .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin: 0.3rem auto;
+}
+
+/* ── WhatsApp Alert ────────────────────────────────────────── */
+.whatsapp-section {
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow-lg);
+}
+
+.whatsapp-content h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+}
+
+.whatsapp-message {
+    background: rgba(37, 211, 102, 0.06);
+    border: 1px solid rgba(37, 211, 102, 0.15);
+    border-radius: var(--radius);
+    padding: 1rem 1.2rem;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    white-space: pre-line;
+    margin: 0.75rem 0;
+    font-family: var(--font);
+}
+
+.whatsapp-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.btn-copy, .btn-whatsapp {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: var(--font);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.btn-copy {
+    background: rgba(255, 255, 255, 0.08);
     color: var(--text-primary);
+    border: 1px solid var(--glass-border);
+}
+
+.btn-copy:hover { background: rgba(255, 255, 255, 0.12); }
+
+.btn-whatsapp {
+    background: linear-gradient(135deg, #25d366, #128c7e);
+    color: #fff;
+}
+
+.btn-whatsapp:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+}
+
+.btn-copy.copied {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border-color: rgba(16, 185, 129, 0.3);
 }
 
 /* ── AWS Badge ─────────────────────────────────────────────── */
