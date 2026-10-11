@@ -503,7 +503,7 @@ function renderTrendChart(labels, aqiData, pm25Data, colors, nowIdx) {
             labels: labels,
             datasets: [
                 {
-                    label: 'US AQI',
+                    label: 'AQI',
                     data: aqiData,
                     borderColor: '#ff9800',
                     backgroundColor: 'rgba(255, 152, 0, 0.1)',
@@ -556,7 +556,7 @@ function renderTrendChart(labels, aqiData, pm25Data, colors, nowIdx) {
                 },
                 y: {
                     position: 'left',
-                    title: { display: true, text: 'US AQI', color: '#ff9800', font: { size: 11 } },
+                    title: { display: true, text: 'AQI', color: '#ff9800', font: { size: 11 } },
                     ticks: { color: '#ff9800', font: { size: 10 } },
                     grid: { color: 'rgba(255,255,255,0.04)' },
                     min: 0,
